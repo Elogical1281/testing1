@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@100..800&family=DM+Serif+Display:ital@0;1&family=Nanum+Gothic&family=Parisienne&family=Tilt+Neon&display=swap');
+
+body {
+  font-family: "Parisienne", "Anek Latin", "Lucida Bright", "Consolas", "Cherokee", "Verdana";
+  background-color: #FFFAFF;
+}
+
+h3 {
+  color: #73564e;
+  line-height: 2;
+}
+
+a {
+  transition: color 0.3s ease;
+  font-family: "Tilt Neon";
+}
+a:hover{
+  color: #8cc8ce;
+}
+
+.blurb {
+  text-align: right;
+}
+
+.box {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  background-repeat: space;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+}
+nav {
+  padding: 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFAFF;
+  border-bottom: 3px outset #a3dfe3;
+}
+.logo {
+  width: 75px;
+}
+nav ul li {
+  display: inline-block;
+  list-style: none;
+  margin: 10px 15px;
+}
+nav ul li a {
+  text-decoration: none;
+  color: #119DA4;
+  font-weight: 400;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 14px 40px;
+  margin-right: 20px;
+  color: #000004;
+  background-color: #FFD23F;
+  font-size: 14px;
+  border-radius: 30px;
+  transition: 0.6s;
+}
+.btn:hover {
+  background-color: #000004;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
+}
+.content {
+  align-items: start;
+  gap: 10px;
+  display: flex;
+  background-image: url(/frontPictures/moving.gif);
+}
+.main-content {
+  align-items: center;
+  display: flex;
+  max-width: 100%;
+  top: 20%;
+  position: fixed;
+  background-size: cover;
+  background-position: center;
+}
+.main-content h1 {
+  font-family: "Parisienne", cursive;
+  color: #119DA4;
+  padding: 100px 100px 0px 100px;
+  font-size: 55px;
+  max-width: 75%;
+  font-weight: 700px;
+}
+.main-content h3 {
+  font-family: "Nanum Gothic";
+  float: left;
+  margin: 8px 0 30px;
+  padding: 15px 100px 0px 100px;
+  font-size: 25px;
+  max-width: 75%;
+}
+.content h1 {
+    font-family: "Parisienne", cursive;
+  color: #119DA4;
+  padding: 100px 100px 0px 100px;
+  font-size: 55px;
+  max-width: 75%;
+    font-weight: 700px;
+
+}
+.content h3 {
+    font-family: "Nanum Gothic";
+  float: left;
+  margin: 8px 0 30px;
+  padding: 15px 100px 0px 100px;
+  font-size: 25px;
+  width: 75%;
+  line-height: 2;
+}
+.featureImg {
+  position: relative;
+  bottom: 20%;
+  top: 20%;
+  margin-right: 10%;
+  width: 25%;
+}
+.aboutImg {
+  position: relative;
+  margin-right: 10%;
+}
+.anim {
+  opacity: 0;
+  transform: translate(30px);
+  animation: moveup 0.6s linear forwards;
+}
+@keyframes moveup {
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+:root{
+    --accent-color: #B9B4BA;
+    --base-color: #FFFAFF;
+    --text-color: #7373a8;
+    --input-color: #DCD7DD;
+    --wrong-answer-son: #cf7f88;
+    --color-text: #666;
+    --accent-brown-text: #73564e;
+}
+*{
+    margin: 0;
+    padding: 0;
+}html{
+    font-family: "Anek Latin", "Lucida Bright", "Consolas", "Cherokee", "Verdana";
+    font-size: 12pt;
+    color: var(--text-color);
+    text-align: center;
+}
+.signUpBox{
+    min-height: 100vh;
+    background-size: cover;
+    background-position: right;
+    background-image: url(/images/pexels-jonathanborba-14820419.jpg);
+
+}
+.wrapper{
+    box-sizing: border-box;
+    background-color: var(--base-color);
+    height: 100vh;
+    width: max(40%, 600px);
+    padding:10px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+h1{
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--color-text);
+    line-height: 2;
+}
+p{
+    color: var(--accent-brown-text);
+    line-height: 2;
+}
+form{
+    width: min(500px, 100%);
+    margin-top: 20px;
+    margin-bottom: 50px;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+form > div{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+form label{
+    flex-shrink: 0;
+    height: 50px;
+    width: 50px;
+    background-color: var(--accent-color);
+    fill: var(--base-color);
+    border-radius: 10px 0 0 10px;
+    -webkit-border-radius: 10px 0 0 10px;
+    -moz-border-radius: 10px 0 0 10px;
+    -ms-border-radius: 10px 0 0 10px;
+    -o-border-radius: 10px 0 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+form input{
+    box-sizing: border-box;
+    flex-grow: 1;
+    min-width: 0;
+    height: 50px;
+    padding: 1em;
+    font: inherit;
+    border-radius: 0 10px 10px 0;
+    -webkit-border-radius: 0 10px 10px 0;
+    -moz-border-radius: 0 10px 10px 0;
+    -ms-border-radius: 0 10px 10px 0;
+    -o-border-radius: 0 10px 10px 0;
+    border: 2px solid var(--input-color);
+    border-left: none;
+    background-color: var(--input-color);
+    transition: 500ms ease;
+    -webkit-transition: 500ms ease;
+    -moz-transition: 500ms ease;
+    -ms-transition: 500ms ease;
+    -o-transition: 500ms ease;
+}
+form input:hover{
+    border-color: var(--accent-color);
+}
+form input:focus{
+    outline: none;
+    border-color:var(--text-color);
+}
+div:has(input:focus) > label{
+    background-color: var(--text-color);
+}
+form input::placeholder{
+    color: var(--accent-color);
+    opacity: 1;
+}
+form button{
+    margin-top: 10px;
+    border: none;
+    border-radius: 1000px;
+    -webkit-border-radius: 1000px;
+    -moz-border-radius: 1000px;
+    -ms-border-radius: 1000px;
+    -o-border-radius: 1000px;
+    padding: 0.85em 4em;
+    color: var(--base-color);
+    font: inherit;
+    cursor: pointer;
+    transition: 0.6s;
+
+}
+form button:hover{
+    background-color: var(--text-color);
+    color: #fed9b6;
+    transition: 0.6s;
+}
+form button:focus{
+    outline: none;
+    background-color: var(--text-color);
+}
+
+@media(max-width:1100px){
+    .wrapper{
+        width: min(600px, 100%);
+        border-radius: 0;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        -ms-border-radius: 0;
+        -o-border-radius: 0;
+    }
+}
+form div.incorrect label{
+    background-color: var(--wrong-answer-son);
+}
+form div.incorrect input{
+    border-color: var(--wrong-answer-son);
+}
+.field-error{
+    display: block;
+    width: 100%;
+    text-align: left;
+    color: var(--wrong-answer-son);
+    font-size: 0.75rem;
+    margin-top: -4px;
+}
