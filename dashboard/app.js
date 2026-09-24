@@ -166,7 +166,7 @@ async function deleteEntry(id) {
 // --- Sidebar view switching -----------------------------------------------
 const viewTitles = {
   dashboard: 'Dashboard',
-  visualizer: 'Visualizer',
+  analytics: 'Analytics',
   settings: 'Settings',
 };
 
