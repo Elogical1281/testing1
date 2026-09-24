@@ -1,0 +1,82 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    background-image: url('./New\ Project\ \(5\).png');
+}
+
+button {
+    float: right;
+    padding: 4px;
+}
+
+input {
+    margin-top: 2px;
+    float: left;
+    width:190px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+p {
+    padding: 0px;
+    margin: 0px;
+}
+
+.handle {
+    height: 20px;
+}
+
+.ui-menu {
+    z-index: 9999;
+    background-color: white;
+    padding: 4px;
+    position: absolute;
+    width: 150px;
+    list-style-type: none;
+}
+
+canvas {
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    z-index: 0;
+}
+
+.ui-menu-item {
+    cursor: pointer;
+}
+
+.ui-menu-item:hover {
+    background-color: rgb(235, 235, 235);
+}
+
+.ui-menu-item-wrapper {
+    padding: 0px;
+}
+
+.handle:hover {
+    cursor: grab;
+}
+
+.node {
+    padding: 2px;
+    user-select: none;
+    background-color: white;
+    position: absolute;
+    text-align: center;
+    width: 200px;
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.137);
+}
+
+div {
+    border-radius: 5px;
+    border: 1px solid black;
+}
