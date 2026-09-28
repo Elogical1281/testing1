@@ -81,6 +81,7 @@ document.addEventListener('mousemove', function (e) {
 let frame = () => {
     total = 0;
     ctx.clearRect(0, 0, W, H);
+    console.log(document);
     for (let i = 1; i < n; i++) {
         if (i !== 0) {
         ctx.beginPath();
@@ -90,14 +91,16 @@ let frame = () => {
         }
     }
     for (let f = 1; f < nodesUnsorted.length; f++) {
-        if (document.querySelector(('#drag' + f) + ' input[name="expense"]').valueAsNumber) {
-        nodesUnsorted[f].value = document.querySelector(('#drag' + f) + ' input[name="expense"]').valueAsNumber;
+        if ($(`#drag${f} > input[name=expense]`).val()) {
+            nodesUnsorted[f].value = -JSON.parse($(`#drag${f} > input[name=expense]`).val());
+        } else if ($(`#drag${f} > input[name=income]`).val()) {
+            nodesUnsorted[f].value = JSON.parse($(`#drag${f} > input[name=income]`).val());
         }
     }
     for (let j = 0; j < nodes[0].length; j++) {
-        total += nodesUnsorted[nodes[0][j]].value
+        total += nodesUnsorted[nodes[0][j]].value;
     }
-    console.log(total);
+    document.querySelector('#drag0').innerHTML = 'Total: $' + total;
     window.requestAnimationFrame(frame);
 }
 
