@@ -77,20 +77,16 @@ nav ul li a {
   background-image: url(/frontPictures/moving.gif);
 }
 .main-content {
-  align-items: center;
+  align-items: start;
+  gap: 10px;
   display: flex;
-  max-width: 100%;
-  top: 20%;
-  position: fixed;
-  background-size: cover;
-  background-position: center;
+  
 }
 .main-content h1 {
   font-family: "Parisienne", cursive;
   color: #119DA4;
   padding: 100px 100px 0px 100px;
   font-size: 55px;
-  max-width: 75%;
   font-weight: 700px;
 }
 .main-content h3 {
@@ -99,14 +95,12 @@ nav ul li a {
   margin: 8px 0 30px;
   padding: 15px 100px 0px 100px;
   font-size: 25px;
-  max-width: 75%;
 }
 .content h1 {
     font-family: "Parisienne", cursive;
   color: #119DA4;
   padding: 100px 100px 0px 100px;
   font-size: 55px;
-  max-width: 75%;
     font-weight: 700px;
 
 }
@@ -116,15 +110,12 @@ nav ul li a {
   margin: 8px 0 30px;
   padding: 15px 100px 0px 100px;
   font-size: 25px;
-  width: 75%;
   line-height: 2;
 }
 .featureImg {
   position: relative;
-  bottom: 20%;
-  top: 20%;
-  margin-right: 10%;
-  width: 25%;
+  max-width: 25%;
+  margin-top: auto;
 }
 .aboutImg {
   position: relative;
