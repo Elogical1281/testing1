@@ -71,13 +71,15 @@ nav ul li a {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
 }
 .content {
-  align-items: start;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
   display: flex;
   background-image: url(/frontPictures/moving.gif);
 }
 .main-content {
   align-items: start;
+  justify-content: center;
   gap: 10px;
   display: flex;
   
@@ -110,16 +112,18 @@ nav ul li a {
   margin: 8px 0 30px;
   padding: 15px 100px 0px 100px;
   font-size: 25px;
-  line-height: 2;
 }
-.featureImg {
+.featureImgRight {
   position: relative;
-  max-width: 25%;
+  max-width: 20%;
   margin-top: auto;
-}
-.aboutImg {
-  position: relative;
   margin-right: 10%;
+}
+.featureImgLeft {
+  position: relative;
+  max-width: 20%;
+  margin-top: auto;
+  margin-left: 10%;
 }
 .anim {
   opacity: 0;
