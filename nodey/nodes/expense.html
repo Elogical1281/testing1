@@ -22,7 +22,7 @@
             <p>: : : Expense : : :</p>
         </div>
         <input type="text" placeholder="Type Of Expense" name="name">
-        <input value="0" type="number" name="expense" class="in">
+        <input value="0" pattern="[0-9]*" inputmode="numeric" type="number" onkeypress="preventNonNumericalInput(event)" name="expense" class="in">
         <script src="../script.js"></script>
     </body>
 </html>

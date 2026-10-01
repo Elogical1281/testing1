@@ -78,6 +78,15 @@ document.addEventListener('mousemove', function (e) {
     mouse.y = e.clientY;
 });
 
+let preventNonNumericalInput = (e) => {
+    e = e || window.event;
+    let charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+    let charStr = String.fromCharCode(charCode);
+
+  if (charStr.match(/[^0-9.-]/g))
+    e.preventDefault();
+}
+
 let frame = () => {
     total = 0;
     ctx.clearRect(0, 0, W, H);
@@ -91,10 +100,10 @@ let frame = () => {
         }
     }
     for (let f = 1; f < nodesUnsorted.length; f++) {
-        if ($(`#drag${f} > input[name=expense]`).val()) {
-            nodesUnsorted[f].value = -JSON.parse($(`#drag${f} > input[name=expense]`).val());
+        if ($(`#drag${f} > input[name=expense]`)) {
+            nodesUnsorted[f].value = -Number($(`#drag${f} > input[name=expense]`).val());
         } else if ($(`#drag${f} > input[name=income]`).val()) {
-            nodesUnsorted[f].value = JSON.parse($(`#drag${f} > input[name=income]`).val());
+            nodesUnsorted[f].value = Number($(`#drag${f} > input[name=income]`).val());
         }
     }
     for (let j = 0; j < nodes[0].length; j++) {
