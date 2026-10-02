@@ -8,8 +8,10 @@ const W = canvas.width;
 const H = canvas.height;
 
 let total = 0;
+let newTotal = 0;
 let n = 0;
 let nodes = [];
+let tP = 0;
 let nodesUnsorted = [];
 
 let mouse = {
@@ -89,6 +91,7 @@ let preventNonNumericalInput = (e) => {
 
 let frame = () => {
     total = 0;
+    tP = 0;
     ctx.clearRect(0, 0, W, H);
     console.log(document);
     for (let i = 1; i < n; i++) {
@@ -100,16 +103,20 @@ let frame = () => {
         }
     }
     for (let f = 1; f < nodesUnsorted.length; f++) {
-        if ($(`#drag${f} > input[name=expense]`)) {
+        if ($(`#drag${f} > input[name=expense]`).val()) {
             nodesUnsorted[f].value = -Number($(`#drag${f} > input[name=expense]`).val());
         } else if ($(`#drag${f} > input[name=income]`).val()) {
             nodesUnsorted[f].value = Number($(`#drag${f} > input[name=income]`).val());
+        } else if ($(`#drag${f} > input[name=percent]`).val()) {
+            document.querySelector(`#drag${f} > #percentage`).innerHTML = (document.querySelector(`#drag${f} > input[name=percent]`).valueAsNumber).toFixed(2) + '%';
+            tP += Number(document.querySelector(`#drag${f} > input[name=percent]`).valueAsNumber);
         }
     }
     for (let j = 0; j < nodes[0].length; j++) {
         total += nodesUnsorted[nodes[0][j]].value;
+        newTotal = total - tP/100*(total);
     }
-    document.querySelector('#drag0').innerHTML = 'Total: $' + total;
+    document.querySelector('#drag0').innerHTML = 'Total: $' + newTotal.toFixed(2);
     window.requestAnimationFrame(frame);
 }
 

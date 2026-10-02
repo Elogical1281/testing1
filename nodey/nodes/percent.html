@@ -7,29 +7,23 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Budgity</title>
+        <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./style.css">
-        <script src="./jquery-4.0.0.min.js"></script>
-        <script src="./jquery-ui.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <ul id="menu" class="hidden">
-            <div onclick="createNode('income')">
-                <li>New (Income) Node</li>
-            </div>
-            <div onclick="createNode('expense')">
-                <li>New (Expense) Node</li>
-            </div>
-            <div onclick="createNode('percent')">
-                <li>New (Expense (%)) Node</li>
-            </div>
-        </ul>
-        <canvas id="canvas"></canvas>
-        <script src="./script.js"></script>
+        
+        
+        <div class="handle" style="background-color: #8995ff">
+            <p>: : : Expense (Percentage) : : :</p>
+        </div>
+        <input type="text" width="100" placeholder="Type Of Expense" name="name">
+        <p id="percentage"></p>
+        <input value="0" type="range" min="0" max="100" name="percent" class="in">
+        <script src="../script.js"></script>
     </body>
 </html>
