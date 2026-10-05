@@ -1,276 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script type='text/javascript' nonce="BiGx3VnTr6yhWD-cPN4mww";>
-const lsijVersion = 1;
-
-
-
-class Flags {
-	constructor(url, terms) {
-		this.url = url;
-		this.matched = {};
-
-		this.terms = [];
-		terms.forEach((term) => {
-			let s = term.replace(/[\]{}?^$().*\\+|[]/g, '\\$&');
-			s = s.replace(/\\\*/g, '.*');
-			s = s.replace(/\\\?/g, '.');
-			let regex = new RegExp('\\b' + s + '\\b', 'gi');
-
-			this.terms.push({term: term, regex: regex});
-		});
-	}
-
-	report(flags) {
-		if (!flags.length) {
-			return;
-		}
-		console.debug('[LS Filter] sending -> ', flags);
-
-		const xhr = new XMLHttpRequest();
-		xhr.open('POST', document.location.origin + '/c2e8c8df8c79ad462ab5f40e45a3025ee2bcf78a4f31599e0b5bf938bd4fc950/log_flag', true);
-		xhr.send(JSON.stringify({
-			url: this.url.href,
-			flags: flags,
-			at_epoch_ms: Date.now()
-		}));
-	}
-
-	matchTerms(input) {
-		const matches = [];
-		this.terms.forEach((term) => {
-			if (this.matched[term.term]) {
-				return;
-			}
-
-			const hits = input.match(term.regex);
-			if (!hits || !hits.length) {
-				return;
-			}
-
-			this.matched[term.term] = hits.length;
-			matches.push([term.term, hits.length]);
-		});
-
-		return matches;
-	}
-
-	scanIntentValue(value) {
-		const matches = this.matchTerms(value);
-		const changes = [];
-
-		matches.forEach((match) => {
-			match[2] = true; // mark as user entered
-			changes.push(match);
-		});
-
-		if (changes.length) {
-			this.report(changes);
-		}
-	}
-
-	scanIntentValues(values) {
-		values.forEach((value) => {
-			this.scanIntentValue(value);
-		});
-	}
-
-	scanIntentEvent(event) {
-		switch (event.target.tagName.toLowerCase()) {
-		case 'input':
-			let type = event.target.type || 'text';
-			type = type.toLowerCase();
-
-			// Dont scan password fields
-			if (type === 'password') {
-				return;
-			}
-
-			this.scanIntentValue(event.target.value);
-			break;
-
-		case 'textarea':
-			this.scanIntentValue(event.target.value);
-			break;
-
-		}
-	}
-
-	scanIntent() {
-		if (typeof(gatherIntent) === 'function') {
-			const intent = gatherIntent();
-			if (intent.length) {
-				this.scanIntentValues(intent);
-			}
-		}
-	}
-
-	onChange(event) {
-		this.scanIntentEvent(event);
-	}
-
-	onKeyup(event) {
-		this.scanIntentEvent(event);
-	}
-
-	bindDOM() {
-		document.addEventListener('change', this.onChange.bind(this));
-		document.addEventListener('keyup', this.onKeyup.bind(this));
-		setInterval(() => {
-			this.scanIntent();
-		}, 1000);
-	}
-}
-
-function initFlagScanning() {
-	const xhr = new XMLHttpRequest();
-	xhr.open('POST', document.location.origin + '/c2e8c8df8c79ad462ab5f40e45a3025ee2bcf78a4f31599e0b5bf938bd4fc950/get_flags', false);
-	xhr.send(JSON.stringify({}));
-	
-	let terms = [];
-	if (xhr.status === 200) {
-		try {
-			terms = JSON.parse(xhr.responseText);
-		} catch (e) {
-			console.error('[LS Filter] failed to parse flagged terms:', e);
-		}
-	}
-
-	if (!terms.length) {
-		return;
-	}
-
-	console.debug('[LS Filter] init flag scanning');
-	const a = document.createElement('A');
-	a.href = window.location.href;
-	const flags = new Flags(a, terms);
-
-	
-	console.debug('[LS Filter] flagging intent');
-
-	if (typeof(initGatherIntent) === 'function') {
-		initGatherIntent();
-	}
-	flags.bindDOM();
-	
-};
-
-initFlagScanning();
-
-
-
-const blockImg = "/c2e8c8df8c79ad462ab5f40e45a3025ee2bcf78a4f31599e0b5bf938bd4fc950/blocked-image-search.png";
-
-let hardBlockPolicy;
-
-function scoreUrl(body, callback) {
-  const xhr = new XMLHttpRequest();
-  const checkUrl = document.location.origin + '/c2e8c8df8c79ad462ab5f40e45a3025ee2bcf78a4f31599e0b5bf938bd4fc950/log';
-  xhr.open('POST', checkUrl, true);
-  xhr.send(JSON.stringify(body));
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) { // Request completed
-      if (this.status === 200 && xhr.responseText) {
-        try {
-          const score = JSON.parse(xhr.responseText);
-          if (callback) {
-            callback(score);
-          } else {
-            console.log('[LS Filter] score ->', score.allow);
-            if (score.redirect) {
-              window.location.href = score.redirect;
-              hardBlock();
-            }
-          }
-        } catch (err) {
-          console.error('[LS Filter] error parsing score response ->', err);
-          if (callback) {
-            callback({ allow: 'error', error: err.message });
-          }
-        }
-      } else {
-        // HTTP error or empty response
-        console.error('[LS Filter] score request failed ->', this.status, xhr.statusText);
-        if (callback) {
-          callback({ allow: 'error', error: `HTTP ${this.status}` });
-        }
-      }
-    }
-  };
-  
-  // Handle network errors
-  xhr.onerror = function() {
-    console.error('[LS Filter] score request network error');
-    if (callback) {
-      callback({ allow: 'error', error: 'network error' });
-    }
-  };
-  
-  // Handle timeout
-  xhr.ontimeout = function() {
-    console.error('[LS Filter] score request timeout');
-    if (callback) {
-      callback({ allow: 'error', error: 'timeout' });
-    }
-  };
-}
-
-function getHardBlockPolicy() {
-  if (typeof(trustedTypes) !== 'undefined' && !hardBlockPolicy) {
-    hardBlockPolicy = trustedTypes.createPolicy('hardBlock', {
-      createHTML: (string) => string
-    });
-  }
-  return hardBlockPolicy;
-}
-
-function hardBlock() {
-  pauseVideo();
-  const stopInt = setInterval(pauseVideo, 500);
-  setTimeout(() => {
-    const policy = getHardBlockPolicy();
-    if (policy) {
-      document.body.innerHTML = policy.createHTML(`<img src="${blockImg}" style="width: 100%; height: 100%">`);
-    } else {
-      document.body.innerHTML = `<img src="${blockImg}" style="width: 100%; height: 100%">`;
-    }
-    clearInterval(stopInt);
-  }, 3000)
-}
-
-function pauseVideo() {
-  const ea = document.getElementsByTagName('video');
-  if (ea.length == 0) { return; }
-  for (i in ea) {
-    if (typeof(ea[i].pause) !== 'function') { continue; }
-    console.debug('[LS Filter] paused ->', ea[i].paused);
-    if (!ea[i].paused) {
-      console.debug('[LS Filter] pause video');
-      ea[i].pause();
-    }
-    const e = ea[i].closest('ytd-channel-video-player-renderer');
-    if (e && e.style.display !== 'none') {
-      console.debug('[LS Filter] hide autoplay container');
-      e.style.display = 'none';
-    }
-  }
-}
-
-function onLoad() {
-  console.log('[LS Filter] loaded');
-  if (window.top === window.self) {
-    console.log('[LS Filter] top window: ' + window.location.href);
-    scoreUrl({ url: window.location.href }, false);
-  }
-}
-
-onLoad();
-
-</script>
+<head>
 <meta charset="UTF-8">
 <title>Budgity Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <style>
+  /* register the colors that change so they can animate */
+  @property --purple-dark{ syntax:'<color>'; inherits:true; initial-value:#b99a32; }
+  @property --bg{          syntax:'<color>'; inherits:true; initial-value:#f5eadb; }
+  @property --card{        syntax:'<color>'; inherits:true; initial-value:#f3ebe0; }
+  @property --text{        syntax:'<color>'; inherits:true; initial-value:#2B2B3A; }
+  @property --muted{       syntax:'<color>'; inherits:true; initial-value:#4a4d63; }
+  @property --border{      syntax:'<color>'; inherits:true; initial-value:#000004; }
+  @property --hover{       syntax:'<color>'; inherits:true; initial-value:#F7F7FB; }
+
   :root{
     --purple: #ffd23f;
     --purple-dark: #b99a32;
@@ -280,6 +23,26 @@ onLoad();
     --text: #2B2B3A;
     --muted: #4a4d63;
     --border: #000004;
+    --hover: #F7F7FB;
+
+    /* same duration + easing as the sliding circle */
+    transition:
+      --purple-dark .3s cubic-bezier(.4,0,.2,1),
+      --bg          .3s cubic-bezier(.4,0,.2,1),
+      --card        .3s cubic-bezier(.4,0,.2,1),
+      --text        .3s cubic-bezier(.4,0,.2,1),
+      --muted       .3s cubic-bezier(.4,0,.2,1),
+      --border      .3s cubic-bezier(.4,0,.2,1),
+      --hover       .3s cubic-bezier(.4,0,.2,1);
+  }
+  :root[data-theme="dark"]{
+    --purple-dark: #002cbf;
+    --bg: #000004;
+    --card: #1f2029;
+    --text: #ececf2;
+    --muted: #a3a6bb;
+    --border: #3a3c4d;
+    --hover: #2a2b38;
   }
   *{box-sizing:border-box;}
   body{
@@ -339,7 +102,7 @@ onLoad();
     transition:background .15s ease, color .15s ease;
     border-radius:8px;
   }
-  .nav-item:hover{ background:#F7F7FB; color:var(--text); }
+  .nav-item:hover{ background:var(--hover); color:var(--text); }
   .nav-item.active{
     background:var(--purple);
     color:#000;
@@ -364,21 +127,6 @@ onLoad();
     margin-top:auto;
     padding-top:20px;
   }
-  .add-product{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    border:1.5px dashed #D8D4F7;
-    color:var(--purple-dark);
-    font-size:13px;
-    font-weight:600;
-    padding:12px;
-    border-radius:12px;
-    cursor:pointer;
-  }
-  .add-product:hover{ background:var(--purple-tint); }
-
   /* MAIN */
   .main{
     flex:1;
@@ -409,28 +157,6 @@ onLoad();
     display:flex;
     align-items:center;
     gap:18px;
-  }
-  .theme-toggle{
-    display:flex;
-    background:var(--bg);
-    border-radius:20px;
-    padding:4px;
-    gap:2px;
-  }
-  .theme-toggle button{
-    border:none;
-    background:transparent;
-    width:30px;height:30px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    color:var(--muted);
-    font-size:14px;
-  }
-  .theme-toggle button.active{
-    background:var(--card);
-    color:var(--purple-dark);
-    box-shadow:0 2px 6px rgba(0,0,0,0.08);
   }
   .user{
     display:flex;
@@ -517,6 +243,44 @@ onLoad();
     font-size:11.5px; color:var(--muted);
     border-top:1px solid var(--border); padding-top:12px;
   }
+
+
+  /* DARK / LIGHT MODE TOGGLE */
+  .theme-toggle{
+    position:relative;
+    display:flex;
+    background:var(--bg);
+    padding:4px;
+    gap:2px;
+    border-radius:20px;
+  }
+  /* the sliding circle */
+  .theme-toggle::before{
+    content:"";
+    position:absolute;
+    top:4px; left:4px;
+    width:30px; height:30px;
+    border-radius:50%;
+    background:var(--card);
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+  }
+  :root[data-theme="dark"] .theme-toggle::before{ transform:translateX(32px); }
+  /* keep the icons above the circle */
+  .theme-toggle button{
+    position:relative;
+    z-index:1;
+    width:30px; height:30px;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:14px;
+    transition:color .3s ease;
+  }
+  .theme-toggle button.active{ color:var(--purple-dark); }
 
   /* PANEL (chart) */
   .panel{
@@ -703,7 +467,7 @@ onLoad();
         <span class="icon">▦</span> Dashboard
       </a>
       <a class="nav-item" data-view="reminders" onclick="showView('reminders')">
-        <span class="icon">🔔</span> Reminders
+        <span class="icon">🕭</span> Reminders
         <span class="badge" id="reminderBadge">0</span>
       </a>
       <a class="nav-item" data-view="purchases" onclick="showView('purchases')">
@@ -715,7 +479,6 @@ onLoad();
     </nav>
 
     <div class="sidebar-footer">
-      <div class="add-product">+ Add Product</div>
     </div>
   </aside>
 
@@ -725,8 +488,8 @@ onLoad();
       <div class="page-title" id="pageTitle">Dashboard</div>
       <div class="topbar-right">
         <div class="theme-toggle">
-          <button class="active">☀</button>
-          <button>☾</button>
+          <button class="active" data-theme-btn="light" aria-label="Light mode">☀</button>
+          <button data-theme-btn="dark" aria-label="Dark mode">☾</button>
         </div>
         <div class="user">
           <div class="avatar">J</div>
@@ -742,7 +505,7 @@ onLoad();
 
       <!-- DASHBOARD VIEW -->
       <div class="view active" id="view-dashboard">
-        <div class="date-pill">📅 09 / 14 / 2026</div>
+        <div class="date-pill">work on time input</div>
 
         <div class="stat-row">
           <div class="stat-card">
@@ -807,7 +570,7 @@ onLoad();
         <div class="panel">
           <div class="panel-head">
             <div class="panel-title">Income vs expenses</div>
-            <div class="panel-sub">Feb – Sep 2026, monthly</div>
+            <div class="panel-sub">Feb – Sep 2026, Monthly</div>
           </div>
           <div class="legend">
             <span><i class="swatch income"></i> Income</span>
@@ -840,7 +603,7 @@ onLoad();
           <div class="field"><label>Price</label><input type="number" id="subPrice" placeholder="9.99" step="0.01"></div>
           <div class="field">
             <label>Cycle</label>
-            <select id="subCycle"><option value="monthly">Monthly</option><option value="yearly">Yearly</option></select>
+            <select id="subCycle"><option value="Monthly">Monthly</option><option value="yearly">Yearly</option></select>
           </div>
           <div class="field"><label>Renews</label><input type="date" id="subDate"></div>
           <div class="form-actions">
@@ -898,8 +661,8 @@ onLoad();
       <!-- ANALYTICS VIEW -->
       <div class="view" id="view-analytics">
         <div class="section-title" style="margin-bottom:14px;">Analytics</div>
-        <div class="placeholder-box">Analytics coming soon.</div>
-      </div>
+        <li><a href="/nodey/index.html">Click here for visualizer</a></li>      
+        </div>
 
     </div>
   </div>
@@ -907,16 +670,16 @@ onLoad();
 
 <script>
   var subsData = [
-    { name:"Figma", color:"#119da4", price:45.00, cycle:"monthly", date:"2026-09-21" },
-    { name:"Adobe Creative Cloud", color:"#e21ae2", price:59.99, cycle:"monthly", date:"2026-09-28" },
-    { name:"Notion", color:"#5e8f41", price:16.00, cycle:"monthly", date:"2026-10-02" },
-    { name:"Slack", color:"#b99a32", price:32.50, cycle:"monthly", date:"2026-10-09" },
-    { name:"QuickBooks", color:"#327a38", price:90.00, cycle:"monthly", date:"2026-10-14" }
+    { name:"Figma", color:"#119da4", price:45.00, cycle:"Monthly", date:"2026-09-21" },
+    { name:"Adobe Creative Cloud", color:"#e21ae2", price:59.99, cycle:"Monthly", date:"2026-09-28" },
+    { name:"Notion", color:"#5e8f41", price:16.00, cycle:"Monthly", date:"2026-10-02" },
+    { name:"Slack", color:"#b99a32", price:32.50, cycle:"Monthly", date:"2026-10-09" },
+    { name:"QuickBooks", color:"#327a38", price:90.00, cycle:"Monthly", date:"2026-10-14" }
   ];
   var remindersData = [];
   var purchasesData = [
-    { name:"Groceries", amount:64.20, addedAt: Date.now() - 1000*60*45 },
-    { name:"Gas", amount:38.00, addedAt: Date.now() - 1000*60*60*5 }
+    { name:"Liam mommy asmr", amount:420.69, addedAt: Date.now() - 1000*60*45 },
+    { name:"My bomb cookies 🤤🤤🤤", amount:67.00, addedAt: Date.now() - 1000*60*60*5 }
   ];
   var palette = ["#119da4","#e21ae2","#5e8f41","#b99a32","#327a38","#ffd23f"];
 
@@ -1043,6 +806,15 @@ onLoad();
     toggleForm('purchaseForm');
     renderPurchases();
   }
+
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.documentElement.setAttribute('data-theme', b.dataset.themeBtn);
+      document.querySelectorAll('[data-theme-btn]').forEach(function(x){
+        x.classList.toggle('active', x === b);
+      });
+    });
+  });
 
   renderSubs();
   renderReminders();
