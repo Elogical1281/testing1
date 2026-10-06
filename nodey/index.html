@@ -10,6 +10,22 @@
         <title>Budgity</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+            if (window.self !== window.top) document.documentElement.classList.add('embedded');
+            // Use the theme chosen on the dashboard (saved in localStorage), or follow the OS.
+            (function () {
+                function apply() {
+                    try {
+                        var t = localStorage.getItem('budgity-theme');
+                        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+                        else document.documentElement.removeAttribute('data-theme');
+                    } catch (e) {}
+                }
+                apply();
+                // Fires when the dashboard (parent page) changes the setting.
+                window.addEventListener('storage', function () { apply(); window.dispatchEvent(new Event('budgity-theme')); });
+            })();
+        </script>
         <link rel="stylesheet" href="./style.css">
         <script src="./jquery-4.0.0.min.js"></script>
         <script src="./jquery-ui.min.js"></script>
@@ -26,6 +42,7 @@
                 <li>New (Expense) Node</li>
             </div>
         </ul>
+        <a href="/dashboard/" class="back-link">&larr; Back to dashboard</a>
         <canvas id="canvas"></canvas>
         <script src="./script.js"></script>
     </body>

@@ -1,9 +1,45 @@
+/* Theme: follows the dashboard's choice (shared via localStorage), or the OS
+   setting when set to auto. The two dark blocks must stay identical. */
+:root {
+    --nd-bg: #ffffff;
+    --nd-surface: #ffffff;
+    --nd-text: #000000;
+    --nd-line: #000000;
+    --nd-hover: rgb(235, 235, 235);
+    --nd-dot: #d6d6d6;
+    color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --nd-bg: #17161c;
+        --nd-surface: #2a2832;
+        --nd-text: #ece8f2;
+        --nd-line: #cfcad8;
+        --nd-hover: #3a3744;
+        --nd-dot: #3b3947;
+        color-scheme: dark;
+    }
+}
+:root[data-theme="dark"] {
+    --nd-bg: #17161c;
+    --nd-surface: #2a2832;
+    --nd-text: #ece8f2;
+    --nd-line: #cfcad8;
+    --nd-hover: #3a3744;
+    --nd-dot: #3b3947;
+    color-scheme: dark;
+}
+
 body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin: 0px;
     padding: 0px;
     overflow: hidden;
-    background-image: url('./New\ Project\ \(5\).png');
+    background-color: var(--nd-bg);
+    color: var(--nd-text);
+    /* dot grid (replaces the old opaque PNG tile so the theme colour shows through) */
+    background-image: radial-gradient(circle at 0 0, var(--nd-dot) 1px, transparent 1.3px);
+    background-size: 16px 16px;
 }
 
 button {
@@ -36,7 +72,8 @@ p {
 
 .ui-menu {
     z-index: 9999;
-    background-color: white;
+    background-color: var(--nd-surface);
+    color: var(--nd-text);
     padding: 4px;
     position: absolute;
     width: 150px;
@@ -55,7 +92,7 @@ canvas {
 }
 
 .ui-menu-item:hover {
-    background-color: rgb(235, 235, 235);
+    background-color: var(--nd-hover);
 }
 
 .ui-menu-item-wrapper {
@@ -69,7 +106,8 @@ canvas {
 .node {
     padding: 2px;
     user-select: none;
-    background-color: white;
+    background-color: var(--nd-surface);
+    color: var(--nd-text);
     position: absolute;
     text-align: center;
     width: 200px;
@@ -78,5 +116,27 @@ canvas {
 
 div {
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid var(--nd-line);
+}
+
+.back-link {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    padding: 6px 10px;
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--nd-text);
+    background-color: var(--nd-surface);
+    border: 1px solid var(--nd-line);
+    border-radius: 5px;
+}
+
+.back-link:hover {
+    background-color: var(--nd-hover);
+}
+
+.embedded .back-link {
+    display: none;
 }

@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="/frontPictures/logo.png" />
     <script>
       // Already logged in? Skip straight to the dashboard.
-      fetch('/api/me').then((res) => { if (res.ok) window.location.href = 'dashboard/index.html'; });
+      fetch('/api/me').then((res) => { if (res.ok) window.location.href = '/dashboard/'; });
     </script>
 </head>
     <body class="signUpBox">
@@ -23,7 +23,7 @@
                 <li><a href="about.html">About the Creators</a></li>
             </ul>
             <div>
-                <a href="/signup.html"class="btn">Sign Up</a>
+                <a href="/signup.html" class="btn">Sign Up</a>
             </div>
         </nav>
         <div class="wrapper">
@@ -41,7 +41,7 @@
                     </label>
                     <input required type="password" name="password" id="password-input" placeholder="Password">
                 </div>
-                <button type="submit"class="btn">Login</button>
+                <button type="submit" class="btn">Login</button>
             </form>
             <p>Don't have an Account? <a href="signup.html">Signup</a></p>
         </div>

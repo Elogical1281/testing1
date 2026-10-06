@@ -1,22 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-  // Set the theme before first paint: the saved choice if there is one,
-  // otherwise whatever the device prefers (auto-detect).
-  (function(){
-    var t = null;
-    try { t = localStorage.getItem('budgity-theme'); } catch(e) {}
-    if(t !== 'light' && t !== 'dark'){
-      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-    }
-    document.documentElement.setAttribute('data-theme', t);
-  })();
-</script>
 <meta charset="UTF-8">
 <title>Budgity Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
 <style>
   /* register the colors that change so they can animate */
   @property --purple-dark{ syntax:'<color>'; inherits:true; initial-value:#b99a32; }
@@ -57,8 +44,6 @@
     --border: #3a3c4d;
     --hover: #2a2b38;
   }
-  :root[data-theme="dark"]{ color-scheme:dark; }
-  :root[data-theme="light"]{ color-scheme:light; }
   *{box-sizing:border-box;}
   body{
     margin:0;
@@ -507,10 +492,10 @@
           <button data-theme-btn="dark" aria-label="Dark mode">☾</button>
         </div>
         <div class="user">
-          <div class="avatar" id="userAvatar">?</div>
+          <div class="avatar">J</div>
           <div class="user-info">
-            <div class="user-name" id="userGreeting">Hey there</div>
-            <div class="user-role"><a href="#" id="logoutBtn" style="color:inherit;">Log out</a></div>
+            <div class="user-name">Hey, Jeevan</div>
+            <div class="user-role">Admin</div>
           </div>
         </div>
       </div>
@@ -520,21 +505,7 @@
 
       <!-- DASHBOARD VIEW -->
       <div class="view active" id="view-dashboard">
-        <div class="date-pill" id="datePill">📅</div>
-        <div class="section-head" style="margin-top:14px;">
-          <div class="section-title">Income</div>
-          <button class="btn-add" onclick="toggleForm('incomeForm')">+ Add Income</button>
-        </div>
-        <div class="inline-form" id="incomeForm">
-          <div class="field"><label>Source</label><input type="text" id="incomeName" placeholder="e.g. Paycheck" maxlength="100"></div>
-          <div class="field"><label>Amount</label><input type="number" id="incomeAmount" placeholder="0.00" step="0.01" min="0.01"></div>
-          <div class="field"><label>Date</label><input type="date" id="incomeDate"></div>
-          <div class="form-actions">
-            <button class="btn-primary" onclick="addIncome()">Add</button>
-            <button class="btn-secondary" onclick="toggleForm('incomeForm')">Cancel</button>
-          </div>
-        </div>
-        <div class="form-error" id="formError" style="color:#b3261e;font-size:12.5px;margin:6px 0;"></div>
+        <div class="date-pill">work on time input</div>
 
         <div class="stat-row">
           <div class="stat-card">
@@ -544,16 +515,16 @@
                 <svg viewBox="0 0 56 56" width="56" height="56">
                   <circle class="ring-track" cx="28" cy="28" r="24" fill="none" stroke-width="5"/>
                   <circle cx="28" cy="28" r="24" fill="none" stroke="#ffd23f" stroke-width="5"
-                          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" id="ringSaved"/>
+                          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="28.6"/>
                 </svg>
-                <div class="ring-value" id="ringSavedVal">0%</div>
+                <div class="ring-value">81%</div>
               </div>
             </div>
             <div>
               <div class="stat-label">Money Saved</div>
-              <div class="stat-value" id="statSaved">$0</div>
+              <div class="stat-value">$25,024</div>
             </div>
-            <div class="stat-foot" id="statSavedFoot">All time</div>
+            <div class="stat-foot">Last 24 Hours</div>
           </div>
 
           <div class="stat-card">
@@ -563,16 +534,16 @@
                 <svg viewBox="0 0 56 56" width="56" height="56">
                   <circle class="ring-track" cx="28" cy="28" r="24" fill="none" stroke-width="5"/>
                   <circle cx="28" cy="28" r="24" fill="none" stroke="#e21ae2" stroke-width="5"
-                          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" id="ringExp"/>
+                          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="57.3"/>
                 </svg>
-                <div class="ring-value" id="ringExpVal">0%</div>
+                <div class="ring-value">62%</div>
               </div>
             </div>
             <div>
               <div class="stat-label">Total Expenses</div>
-              <div class="stat-value" id="statExpenses">$0</div>
+              <div class="stat-value">$14,160</div>
             </div>
-            <div class="stat-foot">All time</div>
+            <div class="stat-foot">Last 24 Hours</div>
           </div>
 
           <div class="stat-card">
@@ -582,16 +553,16 @@
                 <svg viewBox="0 0 56 56" width="56" height="56">
                   <circle class="ring-track" cx="28" cy="28" r="24" fill="none" stroke-width="5"/>
                   <circle cx="28" cy="28" r="24" fill="none" stroke="#119da4" stroke-width="5"
-                          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" id="ringInc"/>
+                          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="84.4"/>
                 </svg>
-                <div class="ring-value" id="ringIncVal">0%</div>
+                <div class="ring-value">44%</div>
               </div>
             </div>
             <div>
               <div class="stat-label">Total Income</div>
-              <div class="stat-value" id="statIncome">$0</div>
+              <div class="stat-value">$10,864</div>
             </div>
-            <div class="stat-foot">All time</div>
+            <div class="stat-foot">Last 24 Hours</div>
           </div>
         </div>
 
@@ -599,16 +570,26 @@
         <div class="panel">
           <div class="panel-head">
             <div class="panel-title">Income vs expenses</div>
-            <div class="panel-sub">Last 8 months</div>
+            <div class="panel-sub">Feb – Sep 2026, Monthly</div>
           </div>
           <div class="legend">
             <span><i class="swatch income"></i> Income</span>
             <span><i class="swatch expenses"></i> Expenses</span>
           </div>
-          <div class="bars" id="bars">
+          <div class="bars">
+            <div class="bar-group"><div class="bar income" style="height:66%" data-amount="$9,200"></div><div class="bar expenses" style="height:44%" data-amount="$6,100"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:74%" data-amount="$10,400"></div><div class="bar expenses" style="height:50%" data-amount="$7,000"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:61%" data-amount="$8,600"></div><div class="bar expenses" style="height:56%" data-amount="$7,800"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:85%" data-amount="$11,900"></div><div class="bar expenses" style="height:46%" data-amount="$6,400"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:90%" data-amount="$12,600"></div><div class="bar expenses" style="height:64%" data-amount="$8,900"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:72%" data-amount="$10,100"></div><div class="bar expenses" style="height:51%" data-amount="$7,200"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:96%" data-amount="$13,400"></div><div class="bar expenses" style="height:69%" data-amount="$9,600"></div></div>
+            <div class="bar-group"><div class="bar income" style="height:77%" data-amount="$10,800"></div><div class="bar expenses" style="height:42%" data-amount="$5,900"></div></div>
           </div>
-          <div class="bar-labels" id="barLabels">
-            </div>
+          <div class="bar-labels">
+            <span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
+            <span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span>
+          </div>
         </div>
 
         <!-- SUBSCRIPTIONS -->
@@ -618,8 +599,8 @@
         </div>
 
         <div class="inline-form" id="subForm">
-          <div class="field"><label>Name</label><input type="text" id="subName" placeholder="e.g. Spotify" maxlength="100"></div>
-          <div class="field"><label>Price</label><input type="number" id="subPrice" placeholder="9.99" step="0.01" min="0.01"></div>
+          <div class="field"><label>Name</label><input type="text" id="subName" placeholder="e.g. Spotify"></div>
+          <div class="field"><label>Price</label><input type="number" id="subPrice" placeholder="9.99" step="0.01"></div>
           <div class="field">
             <label>Cycle</label>
             <select id="subCycle"><option value="Monthly">Monthly</option><option value="yearly">Yearly</option></select>
@@ -633,7 +614,7 @@
 
         <table class="sub-table">
           <thead>
-            <tr><th>Subscription</th><th>Renews</th><th>Cycle</th><th>Price</th><th></th></tr>
+            <tr><th>Subscription</th><th>Renews</th><th>Cycle</th><th>Price</th></tr>
           </thead>
           <tbody id="subTableBody"></tbody>
         </table>
@@ -647,7 +628,7 @@
         </div>
 
         <div class="inline-form" id="reminderForm">
-          <div class="field"><label>Name</label><input type="text" id="reminderName" placeholder="e.g. Pay rent" maxlength="100"></div>
+          <div class="field"><label>Name</label><input type="text" id="reminderName" placeholder="e.g. Pay rent"></div>
           <div class="field"><label>Date</label><input type="date" id="reminderDate"></div>
           <div class="form-actions">
             <button class="btn-primary" onclick="addReminder()">Add</button>
@@ -666,8 +647,8 @@
         </div>
 
         <div class="inline-form" id="purchaseForm">
-          <div class="field"><label>Item</label><input type="text" id="purchaseName" placeholder="e.g. Groceries" maxlength="100"></div>
-          <div class="field"><label>Amount</label><input type="number" id="purchaseAmount" placeholder="0.00" step="0.01" min="0.01"></div>
+          <div class="field"><label>Item</label><input type="text" id="purchaseName" placeholder="e.g. Groceries"></div>
+          <div class="field"><label>Amount</label><input type="number" id="purchaseAmount" placeholder="0.00" step="0.01"></div>
           <div class="form-actions">
             <button class="btn-primary" onclick="addPurchase()">Add</button>
             <button class="btn-secondary" onclick="toggleForm('purchaseForm')">Cancel</button>
@@ -680,11 +661,7 @@
       <!-- ANALYTICS VIEW -->
       <div class="view" id="view-analytics">
         <div class="section-title" style="margin-bottom:14px;">Analytics</div>
-        <div style="margin-bottom:10px;font-size:12.5px;"><a href="/nodey/index.html" style="color:var(--purple-dark);font-weight:600;">Open visualizer full screen</a></div>
-        <iframe id="nodeyFrame" data-src="/nodey/index.html" title="Visualizer"
-          sandbox="allow-scripts allow-same-origin"
-          style="border:3px solid #ffd23f; border-radius:4px; width:100%; height:calc(100vh - 190px); min-height:600px;">
-        </iframe>
+        <div class="placeholder-box">Analytics coming soon.</div>
       </div>
 
     </div>
@@ -692,184 +669,71 @@
 </div>
 
 <script>
-  // Everything below talks to the Budgity API (same server), so data is saved
-  // per account instead of living only in this browser tab.
-  var allItems = [];
+  var subsData = [
+    { name:"Figma", color:"#119da4", price:45.00, cycle:"Monthly", date:"2026-09-21" },
+    { name:"Adobe Creative Cloud", color:"#e21ae2", price:59.99, cycle:"Monthly", date:"2026-09-28" },
+    { name:"Notion", color:"#5e8f41", price:16.00, cycle:"Monthly", date:"2026-10-02" },
+    { name:"Slack", color:"#b99a32", price:32.50, cycle:"Monthly", date:"2026-10-09" },
+    { name:"QuickBooks", color:"#327a38", price:90.00, cycle:"Monthly", date:"2026-10-14" }
+  ];
+  var remindersData = [];
+  var purchasesData = [
+    { name:"Liam mommy asmr", amount:420.69, addedAt: Date.now() - 1000*60*45 },
+    { name:"My bomb cookies 🤤🤤🤤", amount:67.00, addedAt: Date.now() - 1000*60*60*5 }
+  ];
   var palette = ["#119da4","#e21ae2","#5e8f41","#b99a32","#327a38","#ffd23f"];
 
-  function $(id){ return document.getElementById(id); }
-
-  function esc(str){
-    var d = document.createElement('div');
-    d.textContent = str == null ? '' : String(str);
-    return d.innerHTML;
+  function showView(name){
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+    document.querySelector('.nav-item[data-view="' + name + '"]').classList.add('active');
+    var titles = { dashboard:"Dashboard", reminders:"Reminders", purchases:"Recent Purchases", analytics:"Analytics" };
+    document.getElementById('pageTitle').textContent = titles[name];
   }
 
-  function fmtMoney(n){
-    return "$" + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  function toggleForm(id){
+    document.getElementById(id).classList.toggle('open');
   }
+
+  function fmtMoney(n){ return "$" + Number(n).toFixed(2); }
 
   function fmtDate(d){
     var dt = new Date(d + "T00:00:00");
     return dt.toLocaleDateString('en-US', { month:'short', day:'2-digit' });
   }
 
-  function todayStr(){
-    var t = new Date();
-    return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
-  }
-
-  // --- API helper ---------------------------------------------------------
-  async function api(method, url, body){
-    var res = await fetch(url, {
-      method: method,
-      headers: body ? { 'Content-Type': 'application/json' } : undefined,
-      body: body ? JSON.stringify(body) : undefined
-    });
-    if(res.status === 401){ window.location.href = '/login.html'; throw new Error('Not logged in.'); }
-    var data = await res.json().catch(function(){ return {}; });
-    if(!res.ok) throw new Error(data.error || 'Something went wrong.');
-    return data;
-  }
-
-  function showError(msg){ $('formError').textContent = msg || ''; }
-
-  // --- Navigation / forms -------------------------------------------------
-  function showView(name){
-    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
-    $('view-' + name).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
-    document.querySelector('.nav-item[data-view="' + name + '"]').classList.add('active');
-    var titles = { dashboard:"Dashboard", reminders:"Reminders", purchases:"Recent Purchases", analytics:"Analytics" };
-    $('pageTitle').textContent = titles[name];
-    // The visualizer loads the first time it's shown. Loading it while its tab
-    // is hidden gives the page a 0x0 size, which broke its layout.
-    if(name === 'analytics'){
-      var f = $('nodeyFrame');
-      if(!f.getAttribute('src')) f.setAttribute('src', f.dataset.src);
-    }
-  }
-
-  function toggleForm(id){
-    showError('');
-    $(id).classList.toggle('open');
-  }
-
-  // --- Loading ------------------------------------------------------------
-  async function loadBudget(){
-    var data = await api('GET', '/api/budget');
-    allItems = data.items;
-    renderStats(data.totals);
-    renderChart();
-    renderSubs();
-    renderReminders();
-    renderPurchases();
-  }
-
-  function setRing(ringId, valId, fraction){
-    var f = Math.max(0, Math.min(1, fraction || 0));
-    $(ringId).setAttribute('stroke-dashoffset', (150.8 * (1 - f)).toFixed(1));
-    $(valId).textContent = Math.round(f * 100) + '%';
-  }
-
-  function renderStats(t){
-    $('statIncome').textContent = fmtMoney(t.income);
-    $('statExpenses').textContent = fmtMoney(t.expenses);
-    $('statSaved').textContent = fmtMoney(t.saved);
-    var hasIncome = t.income > 0;
-    setRing('ringInc', 'ringIncVal', hasIncome ? 1 : 0);
-    setRing('ringExp', 'ringExpVal', hasIncome ? t.expenses / t.income : 0);
-    setRing('ringSaved', 'ringSavedVal', hasIncome ? t.saved / t.income : 0);
-    $('statSavedFoot').textContent = hasIncome
-      ? Math.round((t.saved / t.income) * 100) + '% of income saved'
-      : 'Income minus expenses';
-  }
-
-  // Income vs. expenses for the last 8 months, from the user's real entries.
-  function renderChart(){
-    var now = new Date();
-    var months = [];
-    for(var i = 7; i >= 0; i--){
-      var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      months.push({
-        key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'),
-        label: d.toLocaleDateString('en-US', { month:'short' }),
-        income: 0, expenses: 0
-      });
-    }
-    allItems.forEach(function(it){
-      if(it.type === 'reminder') return;
-      var m = months.find(function(x){ return x.key === it.entry_date.slice(0,7); });
-      if(!m) return;
-      if(it.type === 'income') m.income += it.amount; else m.expenses += it.amount;
-    });
-    var max = Math.max.apply(null, months.map(function(m){ return Math.max(m.income, m.expenses); }).concat([1]));
-    $('bars').innerHTML = months.map(function(m){
-      return '<div class="bar-group">' +
-        '<div class="bar income" style="height:' + (m.income / max * 100).toFixed(1) + '%" data-amount="' + esc(fmtMoney(m.income)) + '"></div>' +
-        '<div class="bar expenses" style="height:' + (m.expenses / max * 100).toFixed(1) + '%" data-amount="' + esc(fmtMoney(m.expenses)) + '"></div>' +
-      '</div>';
-    }).join('');
-    $('barLabels').innerHTML = months.map(function(m){ return '<span>' + esc(m.label) + '</span>'; }).join('');
-  }
-
-  // --- Subscriptions ------------------------------------------------------
   function renderSubs(){
-    var subs = allItems.filter(function(i){ return i.type === 'subscription'; })
-      .sort(function(a, b){ return a.entry_date < b.entry_date ? -1 : 1; });
-    var body = $('subTableBody');
-    if(subs.length === 0){
-      body.innerHTML = '<tr><td colspan="5"><div class="empty-note">No subscriptions yet.</div></td></tr>';
+    var body = document.getElementById('subTableBody');
+    if(subsData.length === 0){
+      body.innerHTML = '<tr><td colspan="4"><div class="empty-note">No subscriptions yet.</div></td></tr>';
       return;
     }
-    body.innerHTML = subs.map(function(s, idx){
-      var initial = esc(s.name.charAt(0).toUpperCase());
+    body.innerHTML = subsData.map(function(s){
+      var initial = s.name.charAt(0).toUpperCase();
       return '<tr>' +
-        '<td><div class="sub-name-cell"><div class="sub-mark" style="background:' + palette[idx % palette.length] + '">' + initial + '</div>' + esc(s.name) + '</div></td>' +
-        '<td>' + esc(fmtDate(s.entry_date)) + '</td>' +
-        '<td>' + esc(s.category.toLowerCase() === 'yearly' ? 'yearly' : 'monthly') + '</td>' +
-        '<td>' + fmtMoney(s.amount) + '</td>' +
-        '<td>' + delBtn(s.id) + '</td>' +
+        '<td><div class="sub-name-cell"><div class="sub-mark" style="background:' + s.color + '">' + initial + '</div>' + s.name + '</div></td>' +
+        '<td>' + fmtDate(s.date) + '</td>' +
+        '<td>' + s.cycle + '</td>' +
+        '<td>' + fmtMoney(s.price) + '</td>' +
       '</tr>';
     }).join('');
   }
 
-  function delBtn(id){
-    return '<button onclick="removeEntry(' + Number(id) + ')" title="Delete" ' +
-      'style="border:none;background:none;cursor:pointer;color:var(--muted);font-size:14px;">✕</button>';
-  }
-
-  async function removeEntry(id){
-    showError('');
-    try { await api('DELETE', '/api/budget/' + id); await loadBudget(); }
-    catch(e){ showError(e.message); }
-  }
-
-  async function addEntry(payload, formId, fieldIds){
-    showError('');
-    try {
-      await api('POST', '/api/budget', payload);
-      fieldIds.forEach(function(f){ $(f).value = ''; });
-      $(formId).classList.remove('open');
-      await loadBudget();
-    } catch(e){ showError(e.message); }
-  }
-
   function addSubscription(){
-    var name = $('subName').value.trim(), price = $('subPrice').value, date = $('subDate').value;
-    if(!name || !price || !date){ showError('Please fill in the name, price and renewal date.'); return; }
-    addEntry({ type:'subscription', name:name, amount:parseFloat(price), category:$('subCycle').value, entry_date:date },
-      'subForm', ['subName','subPrice','subDate']);
+    var name = document.getElementById('subName').value.trim();
+    var price = document.getElementById('subPrice').value;
+    var cycle = document.getElementById('subCycle').value;
+    var date = document.getElementById('subDate').value;
+    if(!name || !price || !date) return;
+    subsData.push({ name:name, color: palette[subsData.length % palette.length], price:parseFloat(price), cycle:cycle, date:date });
+    document.getElementById('subName').value = '';
+    document.getElementById('subPrice').value = '';
+    document.getElementById('subDate').value = '';
+    toggleForm('subForm');
+    renderSubs();
   }
 
-  function addIncome(){
-    var name = $('incomeName').value.trim(), amount = $('incomeAmount').value, date = $('incomeDate').value || todayStr();
-    if(!name || !amount){ showError('Please fill in the source and amount.'); return; }
-    addEntry({ type:'income', name:name, amount:parseFloat(amount), entry_date:date },
-      'incomeForm', ['incomeName','incomeAmount','incomeDate']);
-  }
-
-  // --- Reminders ----------------------------------------------------------
   function daysUntil(dateStr){
     var target = new Date(dateStr + "T00:00:00");
     var now = new Date();
@@ -878,117 +742,84 @@
   }
 
   function renderReminders(){
-    var list = allItems.filter(function(i){ return i.type === 'reminder'; })
-      .sort(function(a, b){ return a.entry_date < b.entry_date ? -1 : 1; });
-    var badge = $('reminderBadge');
-    badge.textContent = list.length;
-    badge.style.display = list.length ? 'inline-block' : 'none';
-    var el = $('reminderList');
-    if(list.length === 0){
+    var el = document.getElementById('reminderList');
+    document.getElementById('reminderBadge').textContent = remindersData.length;
+    document.getElementById('reminderBadge').style.display = remindersData.length ? 'inline-block' : 'none';
+    if(remindersData.length === 0){
       el.innerHTML = '<div class="empty-note">No reminders yet. Add one above.</div>';
       return;
     }
-    el.innerHTML = list.map(function(r){
-      var days = daysUntil(r.entry_date);
+    el.innerHTML = remindersData.map(function(r, i){
+      var days = daysUntil(r.date);
       var label, cls;
       if(days < 0){ label = Math.abs(days) + (Math.abs(days)===1?' day overdue':' days overdue'); cls='soon'; }
       else if(days === 0){ label = 'Today'; cls='soon'; }
       else { label = 'in ' + days + (days===1?' day':' days'); cls = days <= 3 ? 'soon' : 'ok'; }
       return '<div class="list-row">' +
-        '<div><div class="list-row-name">' + esc(r.name) + '</div><div class="list-row-meta">' + esc(fmtDate(r.entry_date)) + '</div></div>' +
-        '<div class="list-row-right"><div class="countdown ' + cls + '">' + esc(label) + '</div>' + delBtn(r.id) + '</div>' +
+        '<div><div class="list-row-name">' + r.name + '</div><div class="list-row-meta">' + fmtDate(r.date) + '</div></div>' +
+        '<div class="list-row-right"><div class="countdown ' + cls + '">' + label + '</div></div>' +
       '</div>';
     }).join('');
   }
 
   function addReminder(){
-    var name = $('reminderName').value.trim(), date = $('reminderDate').value;
-    if(!name || !date){ showError('Please fill in the name and date.'); return; }
-    addEntry({ type:'reminder', name:name, entry_date:date }, 'reminderForm', ['reminderName','reminderDate']);
+    var name = document.getElementById('reminderName').value.trim();
+    var date = document.getElementById('reminderDate').value;
+    if(!name || !date) return;
+    remindersData.push({ name:name, date:date });
+    document.getElementById('reminderName').value = '';
+    document.getElementById('reminderDate').value = '';
+    toggleForm('reminderForm');
+    renderReminders();
   }
 
-  // --- Purchases ----------------------------------------------------------
-  function fmtTimeAgo(iso){
-    var diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  function fmtTimeAgo(ts){
+    var diff = Math.floor((Date.now() - ts) / 1000);
     if(diff < 60) return 'just now';
     if(diff < 3600) return Math.floor(diff/60) + ' min ago';
     if(diff < 86400) return Math.floor(diff/3600) + ' hr ago';
-    var days = Math.floor(diff/86400);
-    return days + ' day' + (days===1?'':'s') + ' ago';
+    return Math.floor(diff/86400) + ' day' + (Math.floor(diff/86400)===1?'':'s') + ' ago';
   }
 
   function renderPurchases(){
-    var list = allItems.filter(function(i){ return i.type === 'expense'; })
-      .sort(function(a, b){ return a.created_at < b.created_at ? 1 : -1; });
-    var el = $('purchaseList');
-    if(list.length === 0){
+    var el = document.getElementById('purchaseList');
+    if(purchasesData.length === 0){
       el.innerHTML = '<div class="empty-note">No purchases logged yet.</div>';
       return;
     }
-    el.innerHTML = list.map(function(p){
+    var sorted = purchasesData.slice().sort(function(a,b){ return b.addedAt - a.addedAt; });
+    el.innerHTML = sorted.map(function(p){
       return '<div class="list-row">' +
-        '<div><div class="list-row-name">' + esc(p.name) + '</div><div class="time-ago">' + esc(fmtTimeAgo(p.created_at)) + '</div></div>' +
-        '<div class="list-row-right"><div class="amount">' + fmtMoney(p.amount) + '</div>' + delBtn(p.id) + '</div>' +
+        '<div><div class="list-row-name">' + p.name + '</div><div class="time-ago">' + fmtTimeAgo(p.addedAt) + '</div></div>' +
+        '<div class="list-row-right"><div class="amount">' + fmtMoney(p.amount) + '</div></div>' +
       '</div>';
     }).join('');
   }
 
   function addPurchase(){
-    var name = $('purchaseName').value.trim(), amount = $('purchaseAmount').value;
-    if(!name || !amount){ showError('Please fill in the item and amount.'); return; }
-    addEntry({ type:'expense', name:name, amount:parseFloat(amount), entry_date:todayStr() },
-      'purchaseForm', ['purchaseName','purchaseAmount']);
+    var name = document.getElementById('purchaseName').value.trim();
+    var amount = document.getElementById('purchaseAmount').value;
+    if(!name || !amount) return;
+    purchasesData.push({ name:name, amount:parseFloat(amount), addedAt: Date.now() });
+    document.getElementById('purchaseName').value = '';
+    document.getElementById('purchaseAmount').value = '';
+    toggleForm('purchaseForm');
+    renderPurchases();
   }
 
-  // --- Theme: follows the device until you pick one -----------------------
-  // The sliding toggle (sun / moon) saves your choice. With no saved choice the
-  // dashboard matches the device's light/dark setting and updates live if that
-  // setting changes.
-  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
-
-  function savedTheme(){
-    try { var t = localStorage.getItem('budgity-theme'); if(t === 'light' || t === 'dark') return t; } catch(e) {}
-    return null;
-  }
-  function setTheme(theme){
-    document.documentElement.setAttribute('data-theme', theme);
-    document.querySelectorAll('[data-theme-btn]').forEach(function(b){
-      b.classList.toggle('active', b.dataset.themeBtn === theme);
-    });
-  }
   document.querySelectorAll('[data-theme-btn]').forEach(function(b){
     b.addEventListener('click', function(){
-      try { localStorage.setItem('budgity-theme', b.dataset.themeBtn); } catch(e) {}
-      setTheme(b.dataset.themeBtn);
+      document.documentElement.setAttribute('data-theme', b.dataset.themeBtn);
+      document.querySelectorAll('[data-theme-btn]').forEach(function(x){
+        x.classList.toggle('active', x === b);
+      });
     });
   });
-  if(darkQuery){
-    var onDeviceChange = function(e){ if(!savedTheme()) setTheme(e.matches ? 'dark' : 'light'); };
-    if(darkQuery.addEventListener) darkQuery.addEventListener('change', onDeviceChange);
-    else if(darkQuery.addListener) darkQuery.addListener(onDeviceChange);
-  }
-  setTheme(document.documentElement.getAttribute('data-theme') || 'light');
 
-  // --- Logout -------------------------------------------------------------
-  $('logoutBtn').addEventListener('click', async function(e){
-    e.preventDefault();
-    try { await fetch('/api/logout', { method:'POST' }); } catch(err) {}
-    window.location.href = '/login.html';
-  });
-
-  // --- Init: auth guard, then load this user's data -----------------------
-  (async function init(){
-    try {
-      var user = await api('GET', '/api/me');
-      $('userGreeting').textContent = 'Hey, ' + user.username;
-      $('userAvatar').textContent = user.username.charAt(0).toUpperCase();
-      $('datePill').textContent = '📅 ' + new Date().toLocaleDateString('en-US', { month:'2-digit', day:'2-digit', year:'numeric' });
-      await loadBudget();
-      setInterval(renderPurchases, 60000);
-    } catch(e){
-      if(e.message !== 'Not logged in.') showError(e.message);
-    }
-  })();
+  renderSubs();
+  renderReminders();
+  renderPurchases();
+  setInterval(renderPurchases, 60000);
 </script>
 </body>
 </html>

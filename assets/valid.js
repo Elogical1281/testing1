@@ -132,7 +132,7 @@ if (signupForm) {
       .then(async (res) => {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || 'Signup failed.');
-        window.location.href = 'dashboard/index.html';
+        window.location.href = '/dashboard/';
       })
       .catch((err) => {
         // Most likely the username is taken — surface it on the username field.
@@ -187,7 +187,7 @@ if (loginForm) {
       .then(async (res) => {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || 'Login failed.');
-        window.location.href = 'dashboard/index.html';
+        window.location.href = '/dashboard/';
       })
       .catch((err) => {
         showError(passwordDiv, err.message);

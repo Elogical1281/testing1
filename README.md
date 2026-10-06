@@ -21,7 +21,7 @@ A simple budgeting site with real accounts and a saved dashboard.
 ## Setup
 
 ```bash
-cd websitebudgity
+cd testing1-main   # the project folder
 npm install
 npm start
 ```
@@ -41,14 +41,12 @@ Mac, or Linux without any extra build tools.
 ## Project structure
 
 ```
-websitebudgity/
+testing1-main/
   index.html, about.html, mission.html   ← existing static pages, unchanged
   login.html, signup.html                ← now call the real API
   assets/valid.js                        ← client-side validation + API calls
   dashboard/
-    index.html                           ← dashboard shell (auth-guarded)
-    app.js                               ← dashboard logic (loads/saves data)
-    styles.css                           ← dashboard styling
+    index.html                           ← dashboard (auth-guarded, loads/saves via the API)
   server/
     server.js                            ← Express app / static file server
     db.js                                ← JSON file storage (server/data.json)
@@ -67,20 +65,22 @@ websitebudgity/
 | POST   | `/api/logout`      | no             | Clear the session cookie         |
 | GET    | `/api/me`          | yes            | Check who's logged in            |
 | GET    | `/api/budget`      | yes            | List entries + totals            |
-| POST   | `/api/budget`      | yes            | Add an income/expense/subscription entry |
+| POST   | `/api/budget`      | yes            | Add an income/expense/subscription/reminder entry |
 | DELETE | `/api/budget/:id`  | yes            | Delete one of your own entries   |
 
 ## Notes / things to know before deploying this for real
 
-- **`JWT_SECRET`**: the code falls back to a fixed development secret so it
-  runs out of the box. Before putting this anywhere public, set a real
-  secret as an environment variable, e.g. `JWT_SECRET=$(openssl rand -hex 32) npm start`.
-- **Dashboard route protection** is done client-side (the dashboard checks
-  `/api/me` on load and redirects to `login.html` if you're not
-  authenticated). The *data* itself is always protected server-side — every
-  `/api/budget` route requires a valid session — so no one can read or
-  change another user's data even if they loaded the dashboard HTML
-  directly.
+- **`JWT_SECRET`**: in development a random secret is generated once and saved to
+  `server/.jwt-secret` (git-ignored), so logins survive restarts. With `NODE_ENV=production` the
+  server refuses to start unless `JWT_SECRET` is set, e.g.
+  `NODE_ENV=production JWT_SECRET=$(openssl rand -hex 32) npm start`.
+- **Only public files are served.** `server/`, `package.json` and
+  `data.json` (which holds password hashes) are not reachable from the browser.
+- **Rate limiting**: login/signup are limited per IP. Behind a reverse proxy,
+  set `TRUST_PROXY=1` so the real client IP is used.
+- **Dashboard protection**: `/dashboard` redirects to the login page without
+  a valid session, and every `/api/budget` route requires one too, so no one
+  can read or change another user's data.
 - **HTTPS**: cookies are marked `secure` automatically once
   `NODE_ENV=production` is set, which requires serving over HTTPS (e.g.
   behind a reverse proxy). Locally over `http://localhost` this isn't
